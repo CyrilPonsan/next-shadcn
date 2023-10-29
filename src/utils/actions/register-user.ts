@@ -15,17 +15,16 @@ export async function registerUser(_prevState: any, formData: FormData) {
       return validationErrors(error);
     }
   }
-  try {
-    const response = await fetch("http://localhost:3000/api/register", {
-      headers: { Content: "application/json" },
-      method: "POST",
-      body: JSON.stringify({ data }),
-    });
-    const result = await response.json();
-    if (!response.ok) throw result;
+  const response = await fetch("http://localhost:3000/api/register", {
+    headers: { Content: "application/json" },
+    method: "POST",
+    body: JSON.stringify({ data }),
+  });
+  if (response.ok) {
     revalidatePath("/");
-    return result;
-  } catch (error: any) {
+    throw redirect("/");
+  } else {
+    const error = await response.json();
     return [error];
   }
 }

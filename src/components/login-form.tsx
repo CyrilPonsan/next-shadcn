@@ -1,87 +1,60 @@
 "use client";
 
-import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useContext } from "react";
+import React from "react";
 import { SpinnerButton } from "./spinner-button";
-import { FormContext } from "./forms/context/context-form";
-import Link from "next/link";
 import Field from "./forms/field";
-import { validateForm } from "@/utils/validate";
-import { loginFormSchema } from "@/lib/validation/login-form";
+import User from "@/types/interfaces/user";
 import CustomError from "@/types/interfaces/custom-error";
+import { useFormState, useFormStatus } from "react-dom";
+import { login } from "@/utils/actions/login";
+import { ZodError } from "zod";
+import { validationErrors } from "@/utils/validate";
+import { loginFormSchema } from "@/lib/validation/login-form";
+import { signIn } from "next-auth/react";
+
+const initialState: CustomError[] = [];
 
 const LoginForm = () => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const callbackUrl = searchParams.get("callbackUrl") || `/dashboard`;
-  const {
-    isLoading,
-    values,
-    errors,
-    setIsLoading,
-    onValidationErrors,
-    onHasBeenSubmitted,
-  } = useContext(FormContext);
-
-  const loginUser = async (event: React.FormEvent) => {
-    event.preventDefault();
-    onValidationErrors([]);
-    onHasBeenSubmitted(true);
-
-    const errors = validateForm(loginFormSchema, {
-      email: values.email,
-      password: values.password,
-    }) as CustomError[];
-
-    console.log({ errors });
-
-    if (errors?.length > 0) {
-      onValidationErrors(errors);
-      setIsLoading(false);
-      return;
-    }
-
-    setIsLoading(true);
-    signIn("credentials", {
-      email: values.email,
-      password: values.password,
-      redirect: true,
-      callbackUrl,
-    });
-    setIsLoading(false);
-    router.push(`/dashboard`);
-  };
+  const [state, formAction] = useFormState(login, initialState);
+  const { pending } = useFormStatus();
 
   return (
-    <form
-      className="w-5/6 md:w-3/6 xl:w-3/12 2xl:w-3/12 flex flex-col gap-y-4"
-      onSubmit={loginUser}
-    >
-      <h1 className="text-2xl font-extrabold">Connexion</h1>
+    <section className="w-full min-h-[70vh] flex flex-col justify-center items-center">
+      <form
+        className="w-5/6 md:w-3/6 xl:w-3/12 2xl:w-3/12 flex flex-col items-center gap-y-4"
+        action={formAction}
+      >
+        <div className="w-full flex justify-start my-4">
+          <h1 className="text-2xl font-extrabold">Connexion</h1>
+        </div>
 
-      {errors.length > 0 ? (
-        <>
-          <div className="flex justify-start">
-            <p className="text-destructive text-sm font-bold">
-              {errors[0].message}
-            </p>
-          </div>
-        </>
-      ) : null}
+        {state && state.length > 0 ? (
+          <p className="w-full text-destructive text-xs font-bold mb-4">
+            {state[0].message}
+          </p>
+        ) : null}
 
-      <Field name="email" type="email" placeholder="jean.dupont@exemple.fr" />
+        <Field
+          label="Adresse Email"
+          name="email"
+          type="text"
+          placeholder="ex : jean.dupont@exemple.fr"
+          errors={Array.isArray(state) ? state : []}
+        />
 
-      <Field name="password" type="password" />
+        <Field
+          label="Mot de Passe"
+          name="password"
+          type="password"
+          errors={Array.isArray(state) ? state : []}
+        />
 
-      <Link className="text-xs text-center hover:underline" href="#">
-        {"Besoin d'aide ?"}
-      </Link>
-
-      <div className="divider" />
-
-      <SpinnerButton state={isLoading} name="Connexion" />
-    </form>
+        <div className="w-full mt-4">
+          <SpinnerButton state={pending} name="Connexion" />
+        </div>
+      </form>
+    </section>
   );
 };
 

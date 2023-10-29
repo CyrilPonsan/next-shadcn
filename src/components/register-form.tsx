@@ -48,7 +48,7 @@ const RegisterForm = () => {
         />
 
         <div className="w-full mt-4">
-          <SpinnerButton state={pending} name="Connexion" />
+          <SpinnerButton state={pending} name="S'inscrire" />
         </div>
       </form>
     </section>
