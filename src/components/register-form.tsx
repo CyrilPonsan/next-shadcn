@@ -37,14 +37,14 @@ const RegisterForm = () => {
           name="email"
           type="text"
           placeholder="ex : jean.dupont@exemple.fr"
-          errors={state ?? []}
+          errors={Array.isArray(state) ? state : []}
         />
 
         <Field
           label="Mot de Passe"
           name="password"
           type="password"
-          errors={state ?? []}
+          errors={Array.isArray(state) ? state : []}
         />
 
         <div className="w-full mt-4">

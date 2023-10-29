@@ -23,7 +23,7 @@ export async function registerUser(_prevState: any, formData: FormData) {
     });
     const result = await response.json();
     if (!response.ok) throw result;
-    return redirect("/");
+    return redirect("../login");
   } catch (error: any) {
     return [error];
   }
