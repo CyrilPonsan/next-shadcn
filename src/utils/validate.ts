@@ -19,3 +19,17 @@ export function validateForm(schema: any, data: unknown) {
     }
   }
 }
+
+export function validationErrors(error: any) {
+  let validationErrors = Array<CustomError>();
+  for (const item of error.issues) {
+    const customError: CustomError = {
+      type: item.path[0] as string,
+      message: item.message,
+    };
+    validationErrors = [...validationErrors, customError];
+  }
+  console.log({ validationErrors });
+
+  return validationErrors;
+}
