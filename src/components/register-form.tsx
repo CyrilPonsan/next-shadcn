@@ -14,7 +14,7 @@ const RegisterForm = () => {
   const [state, formAction] = useFormState(registerUser, initialState);
   const { pending } = useFormStatus();
 
-  console.log({ pending });
+  console.log({ state });
 
   return (
     <section className="w-full min-h-[70vh] flex flex-col justify-center items-center">
@@ -33,13 +33,19 @@ const RegisterForm = () => {
         ) : null}
 
         <Field
+          label="Adresse Email"
           name="email"
           type="text"
-          placeholder="jean.dupont@exemple.fr"
+          placeholder="ex : jean.dupont@exemple.fr"
           errors={state ?? []}
         />
 
-        <Field name="password" type="password" errors={state ?? []} />
+        <Field
+          label="Mot de Passe"
+          name="password"
+          type="password"
+          errors={state ?? []}
+        />
 
         <div className="w-full mt-4">
           <SpinnerButton state={pending} name="Connexion" />
