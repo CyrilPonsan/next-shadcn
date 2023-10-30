@@ -1,11 +1,10 @@
 "use client";
 
-import { loginFormSchema } from "@/lib/validation/login-form";
 import { ZodError } from "zod";
-import { validationErrors } from "../validate";
 import { signIn } from "next-auth/react";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+
+import { loginFormSchema } from "@/lib/validation/login-form";
+import { validationErrors } from "../validate";
 
 export async function login(_prevState: any, formData: FormData) {
   const data = Object.fromEntries(formData);
