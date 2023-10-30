@@ -4,15 +4,17 @@ import React from "react";
 import { useFormState, useFormStatus } from "react-dom";
 
 import { SpinnerButton } from "./spinner-button";
-import Field from "./forms/field";
+import { registerUser } from "@/utils/actions/register-user";
 import CustomError from "@/types/interfaces/custom-error";
-import { login } from "@/utils/actions/login";
+import Field from "./forms/field";
 
 const initialState: CustomError[] = [];
 
-const LoginForm = () => {
-  const [state, formAction] = useFormState(login, initialState);
+const RegisterForm = () => {
+  const [state, formAction] = useFormState(registerUser, initialState);
   const { pending } = useFormStatus();
+
+  console.log({ state });
 
   return (
     <section className="w-full min-h-[70vh] flex flex-col justify-center items-center">
@@ -21,7 +23,7 @@ const LoginForm = () => {
         action={formAction}
       >
         <div className="w-full flex justify-start my-4">
-          <h1 className="text-2xl font-extrabold">Connexion</h1>
+          <h1 className="text-2xl font-extrabold">Inscription</h1>
         </div>
 
         {state && state.length > 0 ? (
@@ -46,11 +48,11 @@ const LoginForm = () => {
         />
 
         <div className="w-full mt-4">
-          <SpinnerButton state={pending} name="Connexion" />
+          <SpinnerButton state={pending} name="S'inscrire" />
         </div>
       </form>
     </section>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

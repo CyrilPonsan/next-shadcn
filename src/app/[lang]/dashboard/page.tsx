@@ -3,6 +3,7 @@ import React from "react";
 import { redirect } from "next/navigation";
 
 import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { revalidatePath } from "next/cache";
 
 async function getData() {
   const session = await getServerSession(authOptions);
