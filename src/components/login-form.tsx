@@ -1,17 +1,11 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { SpinnerButton } from "./spinner-button";
 import Field from "./forms/field";
-import User from "@/types/interfaces/user";
 import CustomError from "@/types/interfaces/custom-error";
 import { useFormState, useFormStatus } from "react-dom";
 import { login } from "@/utils/actions/login";
-import { ZodError } from "zod";
-import { validationErrors } from "@/utils/validate";
-import { loginFormSchema } from "@/lib/validation/login-form";
-import { signIn } from "next-auth/react";
 
 const initialState: CustomError[] = [];
 

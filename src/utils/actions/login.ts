@@ -20,7 +20,7 @@ export async function login(_prevState: any, formData: FormData) {
   const res = await signIn("credentials", {
     email: data.email,
     password: data.password,
-    redirect: true,
+    redirect: false,
     callbackUrl: "/dashboard",
   });
   if (!res?.ok) {
@@ -29,5 +29,12 @@ export async function login(_prevState: any, formData: FormData) {
       message: "Email ou mot de passe incorrect",
     };
     return [error];
+  } else {
+    await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: true,
+      callbackUrl: "/dashboard",
+    });
   }
 }
